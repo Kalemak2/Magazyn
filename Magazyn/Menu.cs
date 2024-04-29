@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -11,38 +11,36 @@ namespace Magazyn
     internal class Menu
     {
         public static void MenuSystem() {
+            ProductManagement productManager = new ProductManagement();
+            List<StockedProduct> products;
+
+            string productpath = @"product.json";
+            string json = File.ReadAllText(productpath);
+            products = JsonSerializer.Deserialize<List<StockedProduct>>(json);
 
             Console.WriteLine("Witamy w magazynie!");
-            string[] keys = {"Dodaj produkty", "Pokaż produkty", "Złóż zamówienie", "Pokaż zamówienie", "Zakończ" };
+
+            string[] keys = {"Dodaj produkty", "Pokaż produkty"};
             int number = 1;
             foreach(string key in keys)
             {
                 Console.WriteLine($"{number}.{key}");
                 number++;
             }
+
             Console.Write("Wybierz opcję żeby przejść dalej: ");
             string option = Console.ReadLine();
             switch (option)
             {
                 case "1":
                     Console.Clear();
-                    ProductManagement.AddProducts();
+                    productManager.AddProducts(products);
                     break;
                 case "2":
                     Console.Clear();
-                    ProductManagement.ShowProducts();
-                    break;
-                case "3":
-                    Console.Clear();
-                    break;
-                case "4":
-                    Console.Clear();
-                    break;
-                case "5":
-                    Console.Clear();
+                    productManager.ShowProducts(products);
                     break;
                 default:
-                    Console.WriteLine();
                     break;
 
             }
