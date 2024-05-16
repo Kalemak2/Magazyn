@@ -1,142 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Magazyn
 {
-    internal class ProductManagement
+    interface IZarzadzanieProduktami
     {
-        public static void AddProducts() {
+        void AddProducts(List<StockedProduct> produkty);
+        void ShowProducts(List<StockedProduct> produkty);
+    }
+    internal class ProductManagement : IZarzadzanieProduktami
+    {
+        public void AddProducts(List<StockedProduct> productsAdd)
+        {
+            Console.WriteLine("Dodawanie nowych produktów do magazynu");
 
-            List <Product> productsAdd = new List<Product>();
-
-            Console.WriteLine("Dodawanie nowych produktów do zamówienia");
-
-            Console.Write("Podaj nazwe produktu: ");
-            string? name = Console.ReadLine();
+             Console.Write("Podaj nazwę produktu: ");
+            string name = Console.ReadLine();
 
             Console.Write("Podaj opis produktu: ");
-            string? decription = Console.ReadLine();
+            string description = Console.ReadLine();
 
             Console.Write("Podaj producenta produktu: ");
-            string? producer = Console.ReadLine();
+            string producer = Console.ReadLine();
 
-            Console.Write("Podaj kategorie produktu: ");
-            string? category = Console.ReadLine();
+            Console.Write("Podaj kategorię produktu: ");
+            string category = Console.ReadLine();
 
             Console.Write("Podaj cenę produktu: ");
-            if (!(int.TryParse(Console.ReadLine(), out int price)))
-                price = 0;
+            double.TryParse(Console.ReadLine(), out double price);
 
-            Product products = new Product(productsAdd.Count + 1, name, decription, producer, category, price, DateTime.Now);
-            productsAdd.Add(products);
+            Console.Write("Podaj ilość produktu w magazynie: ");
+            int.TryParse(Console.ReadLine(), out int stockQuantity);
+
+            StockedProduct product = new StockedProduct(productsAdd.Count + 1, name, producer, description, category, price, DateTime.Now, stockQuantity);
+
+            productsAdd.Add(product);
+
             string json = JsonSerializer.Serialize(productsAdd);
-            string productspath = @"product.json";
-            File.WriteAllText(productspath, json);;
-            Console.WriteLine("Produkt został dodany!");
+            string productsPath = @"product.json";
+            File.WriteAllText(productsPath, json);
+
+            Console.WriteLine("Produkt został dodany do magazynu!");
         }
 
-        public static void ShowProducts()
+        public void ShowProducts(List<StockedProduct> products)
         {
-            List<Product> productsAdd = new List<Product>();
-
-            string productpath = @"product.json";
-            string json = File.ReadAllText(productpath);
-            productsAdd = JsonSerializer.Deserialize<List<Product>>(json);
-
-            if (productsAdd.Count == 0)
+            if (products.Count == 0)
             {
                 Console.WriteLine("Brak produktów w magazynie!");
             }
             else
             {
-                foreach (var produkty in productsAdd)
+                foreach (var product in products)
                 {
                     Console.WriteLine("-----------------------");
-                    Console.WriteLine($"ID: {produkty.Id}");
-                    Console.WriteLine($"Nazwa: {produkty.Name}");
-                    Console.WriteLine($"Opis: {produkty.Description}");
-                    Console.WriteLine($"Producent: {produkty.Producer}");
-                    Console.WriteLine($"Kategoria: {produkty.Category}");
-                    Console.WriteLine($"Cena: {produkty.Price}");
-                    Console.WriteLine($"Data utworzenia: {produkty.DateCreated}");
+                    Console.WriteLine($"ID: {product.Id}");
+                    Console.WriteLine($"Nazwa: {product.Name}");
+                    Console.WriteLine($"Opis: {product.Description}");
+                    Console.WriteLine($"Producent: {product.Producer}");
+                    Console.WriteLine($"Kategoria: {product.Category}");
+                    Console.WriteLine($"Cena: {product.Price}");
+                    Console.WriteLine($"Data utworzenia: {product.DateCreated}");
+                    if (product is StockedProduct stockedProduct)
+                    {
+                        Console.WriteLine($"Ilość w magazynie: {stockedProduct.StockQuantity}");
+                    }
                     Console.WriteLine("-----------------------");
                 }
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
