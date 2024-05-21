@@ -2,12 +2,7 @@ using System.Text.Json;
 
 namespace Magazyn
 {
-    interface IZarzadzanieProduktami
-    {
-        void AddProducts(List<StockedProduct> produkty);
-        void ShowProducts(List<StockedProduct> produkty);
-    }
-    internal class ProductManagement : IZarzadzanieProduktami
+    internal class ProductManagement : IProductManagement
     {
         public void AddProducts(List<StockedProduct> productsAdd)
         {
